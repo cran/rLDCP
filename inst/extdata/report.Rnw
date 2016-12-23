@@ -1,0 +1,12 @@
+\documentclass[a4paper]{article}
+\begin{document}
+
+\section*{Linguistic report about the room comfort}
+
+<<echo=FALSE>>=
+ load("properties.RData")
+@
+
+The input values for temperature and light intensity are $\Sexpr{properties$dataT}^{\circ}$C and \Sexpr{properties$dataL}mV, respectively. After computation the output linguistic report is: ``\Sexpr{properties $comfort}, because \Sexpr{properties$temp} and \Sexpr{properties$light}''.
+
+\end{document}

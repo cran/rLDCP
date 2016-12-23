@@ -1,0 +1,65 @@
+citHeader("To cite rLDCP in publications use:")
+
+citEntry(entry = "Article",
+  title        = "{rLDCP}: {R} package for text generation form data",
+  author       = personList(as.person("Patricia Conde-Clemente"),
+                   as.person("Jose M. Alonso"),
+                   as.person("Gracian Trivino")),
+  journal      = "Submitted to Journal of Statistical Software",
+  year         = "2016",
+  
+  textVersion  =
+  paste("P. Conde-Clemente, J.M. Alonso, G. Trivino.",
+		"rLDCP: R package for text generation form data.",
+		"Submitted to Journal of Statistical Software.",
+		"(ISSN:1548-7660).")
+)
+
+citEntry(entry = "Article",
+		 title = "Generating automatic linguistic descriptions with big data",
+		 author = "Patricia Conde-Clemente and Gracian Trivino and Jose M. Alonso",
+		 journal = "Information Sciences",
+		 volume = "380",
+		 number = "",
+         pages = "12-30",
+         year = "2017",
+		
+		textVersion  =
+         paste("Conde-Clemente P, Trivino G, Alonso JM (2017).",
+			 "Generating automatic linguistic descriptions with big data.",
+			 "Information Sciences, 380, 12-30.")
+)
+
+citEntry(entry = "Article",
+		title = "Towards automatic generation of linguistic advice for saving energy at home",
+		author = "Patricia Conde-Clemente and Jose M. Alonso and Gracian Trivino",
+		journal = "Soft Computing",
+		volume = "",
+		number = "",
+		pages = " - ",
+		year = "2016",
+		
+		textVersion  =
+         paste("Conde-Clemente P, Alonso JM, Trivino G (2016).",
+			"Towards automatic generation of linguistic advice for saving energy at home.",
+            "Soft Computing")
+
+)
+
+citEntry(entry = "Article",
+			title = "Towards linguistic descriptions of phenomena ",
+			author = "Trivino, G. and Sugeno, M.",
+			journal = "International Journal of Approximate Reasoning ",
+			volume = "54",
+			number = "1",
+			pages = "22-34",
+			year = "2013",
+			
+			textVersion  =
+         paste("Trivino G, Sugeno M (2013).",
+				"Towards linguistic descriptions of phenomena.",
+				"International Journal of Approximate Reasoning", 
+				"54(1), 22-34.")
+)
+
+

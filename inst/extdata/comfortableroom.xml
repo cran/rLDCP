@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ldcp xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ldcpSchema.xsd">
+
+	<input>
+		<file id="input1" path="data.csv" dec="." header="TRUE" type="csv" separator=";" />
+	</input>
+
+	<data_structure>
+		<data ref="input1" id="temperature" column_name="T" position="1"
+			min_value="10" max_value="30" />
+		<data ref="input1" id="light" column_name="L" position="2"
+			min_value="250" max_value="900" />
+	</data_structure>
+
+	<glmp>
+		<cp_list count="3">
+			<cp id="cp_temp">
+				<a count="3">
+					<le id="cold" />
+					<le id="warm" />
+					<le id="hot" />
+				</a>
+			</cp>
+			<cp id="cp_light">
+				<a count="3">
+					<le id="low" />
+					<le id="medium" />
+					<le id="high" />
+				</a>
+			</cp>
+			<cp id="cp_comfort">
+				<a count="3">
+					<le id="uncomfortable" />
+					<le id="comfortable" />
+					<le id="very_comfortable" />
+				</a>
+			</cp>
+		</cp_list>
+
+		<pm_network count="3">
+			<pm id="pm_temp">
+				<u>
+					<data ref="temperature" />
+				</u>
+				<y>
+					<cp ref="cp_temp" />
+				</y>
+				<g>
+					<fuzzy_partitions count="3">
+						<trapezoid_mf>
+							<le ref="cold" />
+							<vertex value="-10" />
+							<vertex value="-10" />
+							<vertex value="10" />
+							<vertex value="20" />
+						</trapezoid_mf>
+						<triangle_mf>
+							<le ref="warm" />
+							<vertex value="10" />
+							<vertex value="20" />
+							<vertex value="25" />
+						</triangle_mf>
+						<trapezoid_mf>
+							<le ref="hot" />
+							<vertex value="20" />
+							<vertex value="25" />
+							<vertex value="40" />
+							<vertex value="40" />
+						</trapezoid_mf>
+					</fuzzy_partitions>
+				</g>
+				<t>
+					<le template=" the temperature is cold " ref="cold" />
+					<le template=" the temperature is warm " ref="warm" />
+					<le template=" the temperature is hot " ref="hot" />
+				</t>
+			</pm>
+
+			<pm id="pm_light">
+				<u>
+					<data ref="light" />
+				</u>
+				<y>
+					<cp ref="cp_light" />
+				</y>
+				<g>
+					<fuzzy_partitions count="3">
+						<trapezoid_mf>
+							<le ref="low" />
+							<vertex value="0" />
+							<vertex value="0" />
+							<vertex value="300" />
+							<vertex value="500" />
+						</trapezoid_mf>
+						<triangle_mf>
+							<le ref="medium" />
+							<vertex value="300" />
+							<vertex value="500" />
+							<vertex value="700" />
+						</triangle_mf>
+						<trapezoid_mf>
+							<le ref="high" />
+							<vertex value="500" />
+							<vertex value="700" />
+							<vertex value="1000" />
+							<vertex value="1000" />
+						</trapezoid_mf>
+					</fuzzy_partitions>
+				</g>
+				<t>
+					<le template=" the light intensity is low" ref="low" />
+					<le template=" the light intensity is medium" ref="medium" />
+					<le template=" the light intensity is high" ref="high" />
+				</t>
+			</pm>
+
+			<pm id="pm_comfort">
+				<u>
+					<cp ref="cp_temp" />
+					<cp ref="cp_light" />
+				</u>
+				<y>
+					<cp ref="cp_comfort" />
+				</y>
+				<g>
+					<fuzzy_rules count="9" conjunction="MIN" disjunction="MAX">
+						<fuzzy_rule>
+							<antecedent ref="cp_temp"><le ref="cold" /></antecedent>
+							<antecedent ref="cp_light"><le ref="low" /></antecedent>
+							<consequent><le ref="uncomfortable" /></consequent>
+						</fuzzy_rule>
+						<fuzzy_rule>
+							<antecedent ref="cp_temp"><le ref="warm" /></antecedent>
+							<antecedent ref="cp_light"><le ref="low" /></antecedent>
+							<consequent><le ref="uncomfortable" /></consequent>
+						</fuzzy_rule>
+						<fuzzy_rule>
+							<antecedent ref="cp_temp"><le ref="hot" /></antecedent>
+							<antecedent ref="cp_light"><le ref="low" /></antecedent>
+							<consequent><le ref="uncomfortable" /></consequent>
+						</fuzzy_rule>
+						<fuzzy_rule>
+							<antecedent ref="cp_temp"><le ref="cold" /></antecedent>
+							<antecedent ref="cp_light"><le ref="medium" /></antecedent>
+							<consequent><le ref="uncomfortable" /></consequent>
+						</fuzzy_rule>
+						<fuzzy_rule>
+							<antecedent ref="cp_temp"><le ref="warm" /></antecedent>
+							<antecedent ref="cp_light"><le ref="medium" /></antecedent>
+							<consequent><le ref="comfortable" /></consequent>
+						</fuzzy_rule>
+						<fuzzy_rule>
+							<antecedent ref="cp_temp"><le ref="hot" /></antecedent>
+							<antecedent ref="cp_light"><le ref="medium" /></antecedent>
+							<consequent><le ref="uncomfortable" /></consequent>
+						</fuzzy_rule>
+						<fuzzy_rule>
+							<antecedent ref="cp_temp"><le ref="cold" /></antecedent>
+							<antecedent ref="cp_light"><le ref="high" /></antecedent>
+							<consequent><le ref="uncomfortable" /></consequent>
+						</fuzzy_rule>
+							<fuzzy_rule>
+							<antecedent ref="cp_temp"><le ref="warm" /></antecedent>
+							<antecedent ref="cp_light"><le ref="high" /></antecedent>
+							<consequent><le ref="very_comfortable" /></consequent>
+						</fuzzy_rule>
+						<fuzzy_rule>
+							<antecedent ref="cp_temp"><le ref="hot" /></antecedent>
+							<antecedent ref="cp_light"><le ref="high" /></antecedent>
+							<consequent><le ref="uncomfortable" /></consequent>
+						</fuzzy_rule>
+					</fuzzy_rules>
+				</g>
+				<t>
+					<le template="The room is uncomfortable" ref="uncomfortable" />
+					<le template="The room is comfortable" ref="comfortable" />
+					<le template="The room is very comfortable" ref="very_comfortable" />
+				</t>
+			</pm>
+		</pm_network>
+	</glmp>
+
+	<report_template>
+  		<output ref="cp_comfort" />
+	  	<text>, because</text>
+  		<output ref="cp_temp" />
+  		<text>and</text>
+  		<output ref="cp_light" />
+	  	<text>.</text>
+	</report_template>
+</ldcp>

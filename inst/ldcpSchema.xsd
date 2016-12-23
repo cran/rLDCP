@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.1"
+	elementFormDefault="qualified">
+
+	<xs:annotation>
+		<xs:appinfo>ldcp Schema</xs:appinfo>
+		<xs:documentation xml:lang="en">
+			This schema defines an LDCP system.
+		</xs:documentation>
+	</xs:annotation>
+
+	<!-- .................................................................................................................. -->
+	<!-- ..................................LDCP definition................................................................... -->
+	<!-- .................................................................................................................. -->
+
+	<xs:element name="ldcp">
+		<xs:complexType>
+
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				An LDCP system begins with the ldcp tag that contains four child elements: input, data_structure, glmp and report_template.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element ref="input" />			
+				<xs:element ref="data_structure" />
+				<xs:element ref="glmp" />
+				<xs:element ref="report_template" />
+			</xs:sequence>
+
+		</xs:complexType>
+
+		<xs:key name="input_file_key">
+			<xs:selector xpath="input/file" />
+			<xs:field xpath="@id" />
+		</xs:key>
+
+		<xs:key name="data_structure_key">
+			<xs:selector xpath="data_structure/data" />
+			<xs:field xpath="@id" />
+		</xs:key>
+
+		<xs:keyref name="input_file_key_ref" refer="input_file_key">
+			<xs:selector xpath="data_structure/data" />
+			<xs:field xpath="@ref" />
+		</xs:keyref>
+
+		<xs:keyref name="data_structure_key_ref" refer="data_structure_key">
+			<xs:selector xpath="glmp/pm_network/pm/u/data" />
+			<xs:field xpath="@ref" />
+		</xs:keyref>
+
+		<xs:key name="cp_key">
+			<xs:selector xpath="glmp/cp_list/cp" />
+			<xs:field xpath="@id" />
+		</xs:key>
+
+		<xs:keyref name="cp_key_ref" refer="cp_key">
+			<xs:selector
+				xpath="glmp/pm_network/pm/y/cp|
+				glmp/pm/u/cp|
+			report_template/output|
+			glmp/pm_network/pm/g/fuzzy_rules/fuzzy_rule/antecedent" />
+			<xs:field xpath="@ref" />
+		</xs:keyref>
+
+		<xs:key name="le_key">
+			<xs:selector xpath="glmp/cp_list/cp/a/le" />
+			<xs:field xpath="@id" />
+		</xs:key>
+
+		<xs:keyref name="le_key_ref" refer="le_key">
+			<xs:selector
+				xpath="glmp/pm_network/pm/g/fuzzy_partitions/triangle_mf/le|
+      glmp/pm_network/pm/g/fuzzy_partitions/trapezoid_mf/le|
+      glmp/pm_network/pm/g/fuzzy_rules/fuzzy_rule/antecedent/le|
+      glmp/pm_network/pm/g/fuzzy_rules/fuzzy_rule/consequent/le|
+      glmp/pm_network/pm/t/le|
+      glmp/cp_list/cp/a/w/lew" />
+			<xs:field xpath="@ref" />
+		</xs:keyref>
+
+
+	</xs:element>
+
+	<!-- .................................................................................................................. -->
+	<!-- ..................................INPUT DATA definition................................................................... -->
+	<!-- .................................................................................................................. -->
+
+	<xs:element name="input">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				The imput element indicates the source of input data. Currently, the rLDCP package only allows loading data from files. In the element input, users can define one or more input files file. Each file element must contain: the identifier (id); the path to the file; the decimal (dec) separator (either "," or "."); the type of the file (only "csv" files are currently supported); the separator symbol (either ";" or "TAB"); and the header flag ("TRUE" in case the file includes header; and \FALSE" otherwise)
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="file" minOccurs="1" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="id" type="xs:ID" use="required" />
+						<xs:attribute name="path" type="xs:string" use="required" />
+						<xs:attribute name="dec"  use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value=",|." />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="header"  default="TRUE">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value="TRUE|FALSE" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="type" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value="csv" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="separator" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value=";|TAB" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- .................................................................................................................. -->
+	<!-- ..................................DATA STRUCTURE definition....................................................... -->
+	<!-- .................................................................................................................. -->
+
+	<xs:element name="data_structure">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				The data_structure element defines the data to be taken as input by GLMP. It includes one or more data elements with six attributes each: the identifier (id); the reference to the file where it is stored (ref); the name of the column (column_name) in the file (optional); the column position in the file i.e., 1, 2, etc; the minimum value (min_value); and the maximum value (max_value), which are real numbers.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="data" minOccurs="1" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="id" type="xs:ID" use="required" />
+						<xs:attribute name="ref" type="xs:IDREF" use="required" />
+						<xs:attribute name="column_name" type="xs:string" />
+						<xs:attribute name="position" type="xs:int" use="required" />
+						<xs:attribute name="max_value" type="xs:double" use="required" />
+						<xs:attribute name="min_value" type="xs:double" use="required" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- .................................................................................................................. -->
+	<!-- ..................................GLMP definition................................................................... -->
+	<!-- .................................................................................................................. -->
+
+	<xs:element name="glmp">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				The glmp element defines the list of CPs (cp_list) and the network of PMs (pm_network). Both child elements have an attribute (count) that contains the number of components in the list and network respectively. The list of CPs (cp_list) defines one or more elements cp. The network of PMs (pm_network) defines one or more elements pm.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="cp_list">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="cp" minOccurs="1" maxOccurs="unbounded" />
+						</xs:sequence>
+						<xs:attribute name="count" type="xs:int" use="required" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="pm_network">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="pm" minOccurs="1" maxOccurs="unbounded" />
+						</xs:sequence>
+						<xs:attribute name="count" type="xs:int" use="required" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<!-- .................................................................................................................. -->
+	<!-- ..................................REPORT TEMPLATE definition................................................................... -->
+	<!-- .................................................................................................................. -->
+
+	<xs:element name="report_template">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				The report_template element defines the Report Template of the LDCP system. It defines two child elements: text and output. The text element provides plain text to be included into the report. Each output has one attribute ref which identifies the related CP.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence maxOccurs="unbounded" >
+				<xs:element ref="output" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="text" type="xs:string"  minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="output" >
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				The output element, is a child element of report_template. It has one attribute ref which identifies the related CP.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:attribute name="ref" type="xs:IDREF" use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- .................................................................................................................. -->
+	<!-- ..................................CP definition................................................................... -->
+	<!-- .................................................................................................................. -->
+
+	<xs:element name="cp">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				The cp element contains one attribute with the identifier (id). The a child element corresponds with the CP vector of 		linguistic expressions A (linguistic_expression_type). It includes one or more le elements with their corresponding id attributes.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="a" type="linguistic_expression_type"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" use="required" />
+			<!--<xs:assert test="@count eq count(./le)" />  --> 
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="linguistic_expression_type">
+		<xs:sequence>
+			<xs:element name="le" minOccurs="1" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:attribute name="id" type="xs:ID" use="required" />				
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="count" type="xs:int" use="required" />		
+	</xs:complexType>
+
+
+	<!-- .................................................................................................................. -->
+	<!-- ..................................PM definition................................................................... -->
+	<!-- .................................................................................................................. -->
+
+	<xs:element name="pm">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				The pm element contains one attribute with the identifier (id) and four child elements: u, y, g and t.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element ref="u" />
+				<xs:element ref="y" />
+				<xs:element ref="g" />
+				<xs:element ref="t" />
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="u">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				The u element corresponds with the PM input U. It can include one or more cp elements; or one data element. Both cp and data have one attribute ref which must match with the identifier id of a cp or data elements previously defined.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:choice>
+				<xs:element name="data" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:attribute name="ref" type="xs:IDREF" use="required" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="cp" type="cp_id_type" minOccurs="1" maxOccurs="unbounded" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="y">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				The y element corresponds with the PM output y. It contains one cp element with one attribute ref which must match with the identifier id of a cp previously defined.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="cp" type="cp_id_type" minOccurs="1" maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="g">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				The g element corresponds with the PM aggregation function g. Currently, the package supports the aggregation through fuzzy rules and membership functions.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:choice>
+				<xs:element name="fuzzy_partitions" type="fuzzy_partitions_type" />
+				<xs:element name="fuzzy_rules" type="fuzzy_rules_type" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="t">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				The t element corresponds with the PM text generation algorithm T. Currently, the package only supports the use of simple templates. Each template refers to one linguistic expressions le defined in the output CP y. The le element has the attribute template that identifies the statement associated with the linguistic expression.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence minOccurs="1" maxOccurs="unbounded">
+				<xs:element name="le" type="le_id_extension_type" />
+			</xs:sequence>
+
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="cp_id_type">
+		<xs:attribute name="ref" type="xs:IDREF" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="le_id_type">
+		<xs:attribute name="ref" type="xs:IDREF" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="le_id_extension_type">
+		<xs:complexContent>
+			<xs:extension base="le_id_type">
+				<xs:attribute name="template" type="xs:string" use="required" />
+				<xs:attribute name="locale" type="xs:string" />
+				<xs:attribute name="user" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<!-- .................................................................................................................. -->
+	<!-- ................................. Fuzzy Rules ................................................................... -->
+	<!-- .................................................................................................................. -->
+
+	<xs:complexType name="fuzzy_rules_type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+			fuzzy_rules_type has three attributes that correspond with the number of rules (count), and the definition of the fuzzy operators used for conjunction and disjunction. Currently, the package supports the product or the minimum (PROD|MIN) for conjunction and the sum or 
+			the maximum (SUM|MAX) for disjunction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence maxOccurs="unbounded">
+			<xs:element ref="fuzzy_rule" />
+		</xs:sequence>
+		<xs:attribute name="conjunction" default="MIN">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="PROD|MIN" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="disjunction" default="MAX">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="SUM|MAX" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="count" type="xs:int" use="required" />
+
+	</xs:complexType>
+
+	<xs:element name="fuzzy_rule">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation xml:lang="en">
+				The fuzzy_rule element has one or more antecedent and only one consequent. Antecedents correspond with input CPs and consequents correspond with output CPs.
+				</xs:documentation>
+			</xs:annotation>
+
+			<xs:sequence>
+				<xs:element name="antecedent" minOccurs="1" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+							Each antecedent has one attribute ref that corresponds with the identifier id of a previously defined cp. It can have one or more le elements. This is because we allow using compose linguistic terms such as \small or medium". le has one attribute ref that corresponds with the identifier id of an le previously defined.
+							</xs:documentation>
+						</xs:annotation>
+						<xs:sequence>
+							<xs:element name="le" type="le_id_type" minOccurs="1" maxOccurs="unbounded" />
+						</xs:sequence>
+						<xs:attribute name="ref" type="xs:IDREF" use="required" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="consequent" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:annotation>
+							<xs:documentation xml:lang="en">
+							The consequent element does not have any attribute ref. This is because only one output is allowed. The le child elements in consequent are dual to the child elements in antecedent.
+							</xs:documentation>
+						</xs:annotation>
+						<xs:sequence>
+							<xs:element name="le" type="le_id_type" maxOccurs="1" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<!-- .................................................................................................................. -->
+	<!-- ..................................Fuzzy Partitions................................................................... -->
+	<!-- .................................................................................................................. -->
+
+	<xs:complexType name="fuzzy_partitions_type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+			fuzzy_partitions_type has one attribute which sets the number of membership functions (count) in the partition. It can define two or more membership functions (mf) for each fuzzy partition. Currently, the package supports two types of membership functions: triangular (triangle_mf) and trapezoidal (trapezoid_mf). Each membership function (mf) has one le element and the corresponding number of vertex elements: three for triangle_mf and four for trapezoid_mf. The vertex element has one attribute value which contains the real number associated to the vertex.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="2" maxOccurs="unbounded">
+			<xs:element ref="mf" />			
+		</xs:sequence>
+		<xs:attribute name="count" type="xs:int" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="mf_type">
+		<xs:sequence>
+			<xs:element name="le" type="le_id_type" minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="triangle_mf_type">
+		<xs:complexContent>
+			<xs:extension base="mf_type">
+				<xs:sequence minOccurs="3" maxOccurs="3">
+					<xs:element ref="vertex" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="trapezoid_mf_type">
+		<xs:complexContent>
+			<xs:extension base="mf_type">
+				<xs:sequence minOccurs="4" maxOccurs="4">
+					<xs:element ref="vertex" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<xs:element name="vertex">
+		<xs:complexType>
+			<xs:attribute name="value" type="xs:double" use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mf" type="mf_type" abstract="true" />
+	<xs:element name="triangle_mf" type="triangle_mf_type"	substitutionGroup="mf" />
+	<xs:element name="trapezoid_mf" type="trapezoid_mf_type" substitutionGroup="mf" />	
+
+
+</xs:schema>
