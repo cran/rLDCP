@@ -1,7 +1,7 @@
-3f6c516f8540715b03eae4f36d02431e *DESCRIPTION
+e4c21deca341e81092b69ae51b548912 *DESCRIPTION
 9735fca0fd1e64516aa90789b84f97b2 *LICENSE
 b4ea028aa557d31285804aff0911cab5 *NAMESPACE
-a5b41aa31f3f18c2f61027505399ab07 *NEWS.md
+eb5199f3b49b2a26173fca932ecbe856 *NEWS.md
 0146aa8c48b79e8890e379da7e794d54 *R/cp.R
 632f34cbb0f593b870b3213b92f034f0 *R/data-structure.R
 c54e85a34e276f333910b787662cb007 *R/fuzzy-mf.R
@@ -16,13 +16,14 @@ a423d9721489383d57d69fb0ccac7b5e *R/xml-Validate.R
 8f5b7a1ffe901b073d8a6e8324f5f13b *R/xml-ldcp.R
 fc8b0e1b8b7e002ba5123709d7f0d3b0 *demo/00Index
 d9349f14c5c1c1c5c1625ec7dd82b7be *demo/inprofilephoto.R
-78929699a0e178b881756548b43bd9cf *inst/CITATION
+f75e1074ee8aefa034c5ba3537d9dccc *inst/CITATION
 5d835db6d6a417aed5115533ce8a17c2 *inst/extdata/comfortableroom-mf-ext.R
 966c2919eeaa9bd187deb19f62c690bc *inst/extdata/comfortableroom-pdf-ext.R
 c8685c19e37bd4fad50f29b0b72a6805 *inst/extdata/comfortableroom.xml
+5cf76aa3ea084a6ae3848bf7c764a718 *inst/extdata/comfortableroomdata.csv
 e16007df04c90fb490b09f53a2fdc76f *inst/extdata/data.csv
 c7fc17a79716c9f60968bcb356fb811b *inst/extdata/report.Rnw
-146f1bbfcc96191e9be87fced9503efe *inst/ldcpSchema.xsd
+e2218b22ebcf038c88b56ef752547bcb *inst/ldcpSchema.xsd
 13c3acd513bc207188e5ef2924c34b1c *man/cp.Rd
 1214ed12705906f2120ec0bb48199787 *man/data_structure.Rd
 d45b28d53573e0ac71f579f18ff6b833 *man/degree_mf.Rd

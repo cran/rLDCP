@@ -91,7 +91,7 @@
 		<xs:complexType>
 			<xs:annotation>
 				<xs:documentation xml:lang="en">
-				The imput element indicates the source of input data. Currently, the rLDCP package only allows loading data from files. In the element input, users can define one or more input files file. Each file element must contain: the identifier (id); the path to the file; the decimal (dec) separator (either "," or "."); the type of the file (only "csv" files are currently supported); the separator symbol (either ";" or "TAB"); and the header flag ("TRUE" in case the file includes header; and \FALSE" otherwise)
+				The input element indicates the source of input data. Currently, the rLDCP package only allows loading data from files. In the element input, users can define one or more input files file. Each file element must contain: the identifier (id); the path to the file; the decimal (dec) separator (either "," or "."); the type of the file (only "csv" files are currently supported); the separator symbol (either ";" or "TAB"); and the header flag ("TRUE" in case the file includes header; and \FALSE" otherwise)
 				</xs:documentation>
 			</xs:annotation>
 			<xs:sequence>
@@ -396,7 +396,7 @@
 					<xs:complexType>
 						<xs:annotation>
 							<xs:documentation xml:lang="en">
-							Each antecedent has one attribute ref that corresponds with the identifier id of a previously defined cp. It can have one or more le elements. This is because we allow using compose linguistic terms such as \small or medium". le has one attribute ref that corresponds with the identifier id of an le previously defined.
+							Each antecedent has one attribute ref that corresponds with the identifier id of a previously defined cp. It can have one or more le elements. This is because we allow using compose linguistic terms such as "small or medium". le has one attribute ref that corresponds with the identifier id of an le previously defined.
 							</xs:documentation>
 						</xs:annotation>
 						<xs:sequence>
