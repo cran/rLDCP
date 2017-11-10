@@ -26,4 +26,3 @@ and the previous set of CPs.
 \examples{
 \dontrun{my_ldcp <- ldcp_run(my_ldcp)}
 }
-

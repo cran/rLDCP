@@ -25,4 +25,3 @@ Then it validates the LDCP system.
 ## The xml is valid
 
 }
-

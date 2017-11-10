@@ -25,4 +25,3 @@ define the anchor points in membership functions.
 \examples{
 trapezoid_mf(0, 1, 2, 3)
 }
-

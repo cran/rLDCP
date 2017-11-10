@@ -203,7 +203,29 @@ pm_report <- function(pm){
 
    description <- pm$t(pm$y)
    description
- }
+}
+
+#' @title Define the pm of a multidimensional cp
+#' @description
+#' It is a set of \code{\link{pm}}s that infer a multidimensional \code{\link{cp}}.
+#'
+#' @param ... the set of \code{\link{pm}}s
+#'
+#' @return The generated \code{pm_multidimensional <- list(...)}
+#' @export
+pm_multidimensional <- function(...){
+
+  pms <- list(...)
+
+  if( length(pms) < 1) stop("Illegal parameter: method must be more than one parameter.")
+
+  for(i in 1:length(pms))
+    if (class(pms[[i]]) !="pm")
+      stop('Illegal parameter class: ', class(pms[[i]]), ". The pms parameter must contain instances of pm class.")
+
+  class(pms) <- "pm_multidimensional"
+  pms
+}
 
 
 

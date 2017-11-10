@@ -35,4 +35,3 @@ report_method <- function(properties,pm){
 my_report <- report_template(properties,
                     report_method)
 }
-

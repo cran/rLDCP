@@ -32,4 +32,3 @@ expression is included and the number 0 means that the linguistic expression is 
 # the room comfort (CPcomfort).
 #
 }
-

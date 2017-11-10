@@ -31,4 +31,3 @@ my_method <- function (input){
 }
  my_data_structure <- data_structure(values,my_method)
 }
-

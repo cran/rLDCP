@@ -42,4 +42,3 @@ pm_depth   <- pm_infer(pm_depth, 650)
 \seealso{
 \code{\link{cp}}
 }
-

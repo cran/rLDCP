@@ -46,4 +46,3 @@ my_glmp <- glmp(list(pm_depth  = pm_depth,
                 glmp_method)
                 }
 }
-

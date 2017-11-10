@@ -117,4 +117,3 @@ pm_frame <-  pm(y=cp_frame, g=g_frame, t=t_frame)
 \seealso{
 \code{\link{cp}}
 }
-

@@ -26,4 +26,3 @@ file. The output file path is another function parameter.
 
 ## The code has been generated successfully
 }
-

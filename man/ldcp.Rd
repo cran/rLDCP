@@ -29,4 +29,3 @@ the \code{\link{glmp}} and the \code{\link{report_template}}.
 \seealso{
 \code{\link{cp}} and \code{\link{pm}}
 }
-

@@ -29,4 +29,3 @@ w <- degree_mf(fuzzy_partitions(triangle_mf(450,450,550),
                                 triangle_mf(800,1000,1300),
                                 trapezoid_mf(1000,1300,1500,1500)),450)
 }
-

@@ -25,4 +25,3 @@ to the fuzzy implication operator (THEN) the function given for conjunction
 \examples{
 operator <- operator(min, max)
 }
-

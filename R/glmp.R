@@ -41,11 +41,11 @@ glmp <- function(pms,method){
 
   if(class(pms) != "list") stop("Illegal parameter: pms must be an instance of list class")
 
-  if(length(pms)==0) stop("Illegal number of pms")
+  if(class(pms) != "list" & length(pms)==0) stop("Illegal number of pms")
 
   for(i in 1:length(pms))
-    if (class(pms[[i]]) !="pm")
-      stop('Illegal parameter class: ', class(pms[[i]]), ". The pms parameter must contain instances of pm class.")
+    if (class(pms) == "list" & class(pms[[i]]) !="pm" & class(pms[[i]]) != "pm_multidimensional")
+      stop('Illegal parameter class: ', class(pms[[i]]), ". The pms parameter must contain instances of pm or pm_multidimensional class.")
 
   obj <- list(pms = pms,
               method = method)

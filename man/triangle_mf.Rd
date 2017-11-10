@@ -23,4 +23,3 @@ define the anchor points in membership functions.
 \examples{
 triangle_mf(0, 1, 2)
 }
-

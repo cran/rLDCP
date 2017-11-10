@@ -28,4 +28,3 @@ function parameter.
 ## The xml is valid
 ## The code has been generated successfully
 }
-
